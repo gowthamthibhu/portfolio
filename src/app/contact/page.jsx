@@ -75,26 +75,33 @@ export default function ContactForm() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+    
         if (!validateForm()) {
             alert('Please fill in all required fields');
             return;
         }
-
-        const response = await fetch('/api/sendEmail', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        });
-
-        if (response.ok) {
-            alert('Email sent successfully');
-        } else {
-            alert('Error sending email');
+    
+        try {
+            const response = await fetch('/api/sendEmail', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+    
+            if (response.ok) {
+                alert('Email sent successfully');
+            } else {
+                const errorData = await response.json();
+                alert(`Error: ${errorData.message}`);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An unexpected error occurred');
         }
     };
+    
 
     return (
         <motion.div style={{y}} ref={container} className={styles.contact}>
