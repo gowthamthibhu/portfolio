@@ -105,7 +105,7 @@ export default function ContactForm() {
                             <Image 
                                 fill={true}
                                 alt={"image"}
-                                src={`/images/bg.jpg`}
+                                src={`./images/bg.jpg`}
                             />
                         </div>
                         <h2>Where Creativity <br /> Meets Technology</h2>

@@ -116,7 +116,7 @@ export default function Index() {
             <div className={styles.parallaxContainer}>
                 <div className={styles.parallaxImage}>            
                     <Parallax 
-                        bgImage="/images/contact1.jpg" 
+                        bgImage="./images/contact1.jpg" 
                         strength={500}
                         className={styles.parallax}
                         bgImageAlt="parallax"
@@ -149,7 +149,7 @@ export default function Index() {
                                     <Image 
                                     fill={true}
                                     alt={"image"}
-                                    src={`/images/${project.src}`}/>
+                                    src={`./images/${project.src}`}/>
                                 </div>
                             </div>
                         })
@@ -163,7 +163,7 @@ export default function Index() {
                                     <Image 
                                     fill={true}
                                     alt={"image"}
-                                    src={`/images/${project.src}`}/>
+                                    src={`./images/${project.src}`}/>
                                 </div>
                             </div>
                         })
@@ -177,7 +177,7 @@ export default function Index() {
                                     <Image 
                                     fill={true}
                                     alt={"image"}
-                                    src={`/images/${project.src}`}/>
+                                    src={`./images/${project.src}`}/>
                                 </div>
                             </div>
                         })

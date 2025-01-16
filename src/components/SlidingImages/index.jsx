@@ -63,7 +63,7 @@ export default function Index() {
                                     <Image 
                                     fill={true}
                                     alt={"image"}
-                                    src={`/images/${project.src}`}/>
+                                    src={`./images/${project.src}`}/>
                                 </div>
                             </div>
                         })
@@ -77,7 +77,7 @@ export default function Index() {
                                     <Image 
                                     fill={true}
                                     alt={"image"}
-                                    src={`/images/${project.src}`}/>
+                                    src={`./images/${project.src}`}/>
                                 </div>
                             </div>
                         })

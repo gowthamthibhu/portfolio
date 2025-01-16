@@ -24,7 +24,7 @@ export default function Index() {
                             <Image 
                             fill={true}
                             alt={"image"}
-                            src={`/images/bg.jpg`}
+                            src={`./images/bg.jpg`}
                             />
                         </div>
                         <h2>Contact Me!</h2>
