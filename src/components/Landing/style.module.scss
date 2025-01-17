@@ -54,5 +54,16 @@
   }
 }
 
-
+@media (max-width: 768px){
+  .landing{
+    .sliderContainer{
+      top: calc(100vh - 250px);
+    }
+    .slider p{
+      font-size: 100px;
+      padding-right: 20px;
+    }
+    
+  }
+}
 

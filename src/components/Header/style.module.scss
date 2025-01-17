@@ -166,13 +166,13 @@
     animation: fadeIn 1s ease-in-out, fadeOut 5s ease-in-out 4s; /* Apply the fade-in and fade-out animations */
 }
 
-.headerButtonContainer {
+.headerButtonContainer{
     transform: scale(0);
     position: fixed;
     right: 0px;
     z-index: 4;
 
-    .button {
+    .button{
         position: relative;
         margin: 20px;
         width: 80px;
@@ -184,13 +184,12 @@
         align-items: center;
         justify-content: center;
     }
-
-    .burger {
+    
+    .burger{
         width: 100%;
         position: relative;
         z-index: 1;
-        &::after,
-        &::before {
+        &::after, &::before{
             content: "";
             display: block;
             height: 1px;
@@ -200,27 +199,63 @@
             position: relative;
             transition: transform 0.3s;
         }
-
-        &::after {
+    
+        &::after{
             top: -5px;
         }
-
-        &::before {
+    
+        &::before{
             top: 5px;
         }
     }
-
-    .burgerActive {
-        &::after {
+    @media (max-width: 600px) {
+        .headerButtonContainer {
+            right: 10px; /* Adjust the right position for mobile view */
+            bottom: 10px; /* Optionally, adjust the bottom position */
+        }
+    }
+    
+    .burgerActive{
+    
+        &::after{
             transform: rotate(45deg);
             top: -1px;
         }
-
-        &::before {
+    
+        &::before{
             transform: rotate(-45deg);
             top: 0px;
         }
+        
     }
 }
 
 /* Mobile view adjustments */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px;
+
+        .logo {
+            margin-bottom: 20px;
+        }
+
+        .nav {
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: space-between;
+            width: 100%;
+
+            .el {
+                padding: 0px 10;
+                margin: 0px;
+                .indicator {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    
+}

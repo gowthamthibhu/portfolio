@@ -34,3 +34,19 @@
     }
 }
 /* Mobile view adjustments */
+@media (max-width: 768px) {
+    .introduction {
+        svg {
+            height: calc(100% + 1000px); /* Reduce extra height */
+            width: 110%; /* Full width */
+        }
+
+        p {
+            font-size: 28px; /* Smaller font size for mobile */
+            span {
+                width: 8px;
+                height: 8px;
+            }
+        }
+    }
+}
