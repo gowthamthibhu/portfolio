@@ -176,11 +176,12 @@
 
     @media (max-width: 768px) {
         .body {
-            padding-top: 320px;
+            padding-top: 0px;
             
             .title {
                 margin-left: 20px;
                 margin-right: 20px;
+                margin-top: 106%;
                 padding-bottom: 50px;
                 
                 span {

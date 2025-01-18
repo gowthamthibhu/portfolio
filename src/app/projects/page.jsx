@@ -77,7 +77,6 @@ const projects = [
     color: "#8C8C8C"
   },
 ];
-
 const scaleAnimation = {
   initial: {scale: 0, x:"-50%", y:"-50%"},
   enter: {scale: 1, x:"-50%", y:"-50%", transition: {duration: 0.4, ease: [0.76, 0, 0.24, 1]}},
@@ -86,7 +85,7 @@ const scaleAnimation = {
 
 export default function Projects() {
   const [activeFilter, setActiveFilter] = useState('All');
-  const [activeView, setActiveView] = useState('list');
+  const [isMobile, setIsMobile] = useState(false);
   const [modal, setModal] = useState({active: false, index: 0});
   const { active, index } = modal;
 
@@ -102,26 +101,43 @@ export default function Projects() {
   let yMoveCursorLabel = useRef(null);
 
   useEffect(() => {
-    xMoveContainer.current = gsap.quickTo(modalContainer.current, "left", {duration: 0.8, ease: "power3"});
-    yMoveContainer.current = gsap.quickTo(modalContainer.current, "top", {duration: 0.8, ease: "power3"});
-    xMoveCursor.current = gsap.quickTo(cursor.current, "left", {duration: 0.5, ease: "power3"});
-    yMoveCursor.current = gsap.quickTo(cursor.current, "top", {duration: 0.5, ease: "power3"});
-    xMoveCursorLabel.current = gsap.quickTo(cursorLabel.current, "left", {duration: 0.45, ease: "power3"});
-    yMoveCursorLabel.current = gsap.quickTo(cursorLabel.current, "top", {duration: 0.45, ease: "power3"});
-  }, []);
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    if (!isMobile) {
+      xMoveContainer.current = gsap.quickTo(modalContainer.current, "left", {duration: 0.8, ease: "power3"});
+      yMoveContainer.current = gsap.quickTo(modalContainer.current, "top", {duration: 0.8, ease: "power3"});
+      xMoveCursor.current = gsap.quickTo(cursor.current, "left", {duration: 0.5, ease: "power3"});
+      yMoveCursor.current = gsap.quickTo(cursor.current, "top", {duration: 0.5, ease: "power3"});
+      xMoveCursorLabel.current = gsap.quickTo(cursorLabel.current, "left", {duration: 0.45, ease: "power3"});
+      yMoveCursorLabel.current = gsap.quickTo(cursorLabel.current, "top", {duration: 0.45, ease: "power3"});
+    }
+
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, [isMobile]);
 
   const moveItems = (x, y) => {
-    xMoveContainer.current(x);
-    yMoveContainer.current(y);
-    xMoveCursor.current(x);
-    yMoveCursor.current(y);
-    xMoveCursorLabel.current(x);
-    yMoveCursorLabel.current(y);
+    if (!isMobile && xMoveContainer.current) {
+      xMoveContainer.current(x);
+      yMoveContainer.current(y);
+      xMoveCursor.current(x);
+      yMoveCursor.current(y);
+      xMoveCursorLabel.current(x);
+      yMoveCursorLabel.current(y);
+    }
   }
 
   const manageModal = (active, index, x, y) => {
-    moveItems(x, y);
-    setModal({active, index});
+    if (!isMobile) {
+      moveItems(x, y);
+      setModal({active, index});
+    }
   }
 
   const navigateToUrl = (url) => {
@@ -133,17 +149,15 @@ export default function Projects() {
     return acc;
   }, {});
 
-
-  // Filter projects based on the selected filter
   const filteredProjects = activeFilter === 'All' 
     ? projects 
     : projects.filter(project => project.category === activeFilter);
 
   return (
     <main onMouseMove={(e) => {moveItems(e.clientX, e.clientY)}} className={styles.projects}>
-      <h1>
-        Working on<br />innovative projects
-      </h1>
+      <div className={styles.title}>
+        <h1>Working on<br />innovative projects</h1>
+      </div>
 
       <div className={styles.filters}>
         <div className={styles.filterButtons}>
@@ -157,68 +171,78 @@ export default function Projects() {
             Development <span>{filterCounts['Development'] || 0}</span>
           </button>
         </div>
-
-        <div className={styles.viewButtons}>
-          <button onClick={() => setActiveView('list')} className={activeView === 'list' ? styles.active : ''}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M3 12h18M3 6h18M3 18h18"/>
-            </svg>
-          </button>
-          
-          <button onClick={() => setActiveView('grid')} className={activeView === 'grid' ? styles.active : ''}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <rect x="3" y="3" width="7" height="7"/>
-              <rect x="14" y="3" width="7" height="7"/>
-              <rect x="3" y="14" width="7" height="7"/>
-              <rect x="14" y="14" width="7" height="7"/>
-            </svg>
-          </button>
-        </div>
       </div>
 
-      <div className={styles.projectsList}>
-        <div className={styles.tableHeader}>
-          <div>PROJECT</div>
-          <div>LOCATION</div>
-          <div>SERVICES</div>
-          <div>YEAR</div>
-        </div>
-
-        {filteredProjects.map((project, index) => (
-          <div 
-            key={index} 
-            className={styles.projectItem}
-            onMouseEnter={(e) => {manageModal(true, index, e.clientX, e.clientY)}}
-            onMouseLeave={(e) => {manageModal(false, index, e.clientX, e.clientY)}}
-            onClick={() => {navigateToUrl(project.url)}}
-          >
-            <div>{project.client}</div>
-            <div>{project.location}</div>
-            <div>{project.services}</div>
-            <div>{project.year}</div>
-          </div>
-        ))}
-      </div>
-
-      <motion.div ref={modalContainer} variants={scaleAnimation} initial="initial" animate={active ? "enter" : "closed"} className={styles.modalContainer}>
-        <div style={{top: index * -100 + "%"}} className={styles.modalSlider}>
-          {projects.map((project, index) => {
-            const { src, color } = project;
-            return (
-              <div className={styles.modal} style={{backgroundColor: color}} key={`modal_${index}`}>
+      {isMobile ? (
+        <div className={styles.mobileBody}>
+          {filteredProjects.map((project, index) => (
+            <div key={index} className={styles.mobileProject} onClick={() => navigateToUrl(project.url)}>
+              <div className={styles.imageWrapper}>
                 <Image 
-                  src={`./images/${src}`}
+                  src={`./images/${project.src}`}
                   width={300}
                   height={0}
-                  alt="image"
+                  alt={project.client}
+                  className={styles.projectImage}
                 />
               </div>
-            );
-          })}
+              <div className={styles.projectInfo}>
+                <h3>{project.client}</h3>
+                <p>{project.services}</p>
+                <span className={styles.year}>{project.year}</span>
+              </div>
+            </div>
+          ))}
         </div>
-      </motion.div>
-      <motion.div ref={cursor} className={styles.cursor} variants={scaleAnimation} initial="initial" animate={active ? "enter" : "closed"}></motion.div>
-      <motion.div ref={cursorLabel} className={styles.cursorLabel} variants={scaleAnimation} initial="initial" animate={active ? "enter" : "closed"}>View</motion.div>
+      ) : (
+        <div className={styles.projectsList}>
+          <div className={styles.tableHeader}>
+            <div>PROJECT</div>
+            <div>LOCATION</div>
+            <div>SERVICES</div>
+            <div>YEAR</div>
+          </div>
+
+          {filteredProjects.map((project, index) => (
+            <div 
+              key={index} 
+              className={styles.projectItem}
+              onMouseEnter={(e) => {manageModal(true, index, e.clientX, e.clientY)}}
+              onMouseLeave={(e) => {manageModal(false, index, e.clientX, e.clientY)}}
+              onClick={() => {navigateToUrl(project.url)}}
+            >
+              <div>{project.client}</div>
+              <div>{project.location}</div>
+              <div>{project.services}</div>
+              <div>{project.year}</div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {!isMobile && (
+        <>
+          <motion.div ref={modalContainer} variants={scaleAnimation} initial="initial" animate={active ? "enter" : "closed"} className={styles.modalContainer}>
+            <div style={{top: index * -100 + "%"}} className={styles.modalSlider}>
+              {projects.map((project, index) => {
+                const { src, color } = project;
+                return (
+                  <div className={styles.modal} style={{backgroundColor: color}} key={`modal_${index}`}>
+                    <Image 
+                      src={`./images/${src}`}
+                      width={300}
+                      height={0}
+                      alt="image"
+                    />
+                  </div>
+                );
+              })}
+            </div>
+          </motion.div>
+          <motion.div ref={cursor} className={styles.cursor} variants={scaleAnimation} initial="initial" animate={active ? "enter" : "closed"}></motion.div>
+          <motion.div ref={cursorLabel} className={styles.cursorLabel} variants={scaleAnimation} initial="initial" animate={active ? "enter" : "closed"}>View</motion.div>
+        </>
+      )}
     </main>
   );
 }

@@ -21,13 +21,14 @@
         .title {
             border-bottom: 1px solid rgb(134, 134, 134);
             padding-bottom: 100px;
-            margin-top: 60%;
+            margin-top: 80px;
             margin-left: 200px;
             margin-right: 200px;
             position: relative;
 
             @media (max-width: 768px) {
                 margin-left: 24px;
+                margin-top: 60%;
                 margin-right: 24px;
                 padding-bottom: 60px;
             }
